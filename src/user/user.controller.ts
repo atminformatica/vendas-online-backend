@@ -1,19 +1,22 @@
 import { Body,Controller,Get,Post } from '@nestjs/common';
 import { CreateUserDto } from './dtos/createUser.dto';
+import { UserService } from './user.service';
+import { User } from './interface/user.interface';
 
 @Controller('user')
 export class UserController {
+    constructor(private readonly userService:UserService){}
+
     @Get()
-    async getAllusers(){
-        return JSON.stringify("abc")
+    async getAllusers():Promise<User[]>{
+        return this.userService.getAllUser()
     }
 
     @Post()
-    async createUser(@Body() createUser:CreateUserDto){
-        return{
-            ...createUser,  //spreet
-            password:undefined //retorna o objeto createUser com o password vazio
-        } 
+    async createUser(@Body() createUser:CreateUserDto):Promise<User>{
+        return(
+           this.userService.createUser(createUser)
+        )
     }
 
 }
