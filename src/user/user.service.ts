@@ -1,34 +1,32 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dtos/createUser.dto';
-import { User } from './interface/user.interface';
+import { UserEntity } from './interface/user.entity';
 import {hash} from 'bcrypt'
-import { promises } from 'dns';
+import {InjectRepository} from '@nestjs/typeorm'
+import {Repository} from 'typeorm'
 
 @Injectable()
 export class UserService {
-    private users: User[] = []
+    constructor(
+        @InjectRepository(UserEntity)
+        private readonly userRepository: Repository<UserEntity>
+    ){}
 
-    async getAllUser():Promise<User[]>{
+    async getAllUser():Promise<UserEntity[]>{
         return (
-            this.users
+            this.userRepository.find()
         )
     }
-    async createUser(createUserDto:CreateUserDto): Promise<User>{
+    async createUser(createUserDto:CreateUserDto): Promise<UserEntity>{
         const saltOrRounds = 10;
         const password = createUserDto.password;
         const passwordHashed = await hash(password, saltOrRounds);
         console.log("senha criptografada",passwordHashed)
 
-        //salva o usuario no banco de dados - mas por enquanto vamos salvar em memoria apenas
-        const user:User = {
+        //salva o usuario no banco de dados -
+        return this.userRepository.save({
             ...createUserDto,
-            id:this.users.length + 1,
             password:passwordHashed,
-
-        }
-
-        this.users.push(user)    
-
-        return user
+        })
     }
 }
