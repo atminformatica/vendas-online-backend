@@ -16,8 +16,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       password: process.env.DB_PASSWORD,
       port: Number(process.env.DB_PORT),
       username: process.env.DB_USERNAME,
-      synchronize: true,//apenas em tempo de execucao, ideal seria false, true ele cria banco automatico
+      //synchronize: true,//apenas em tempo de execucao, ideal seria false, true ele cria banco automatico
       entities: [`${__dirname}/**/*.entity{.js,.ts}`],//poderia colocar uma por uma entities: [UserEntity]
+      migrations: [`${__dirname}/migration/{.ts,*.js}`],
+      migrationsRun: true,
     }),
     UserModule
   ],

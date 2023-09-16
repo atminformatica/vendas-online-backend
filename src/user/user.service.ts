@@ -26,6 +26,7 @@ export class UserService {
         //salva o usuario no banco de dados -
         return this.userRepository.save({
             ...createUserDto,
+            typeUser: 1,
             password:passwordHashed,
         })
     }
