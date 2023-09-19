@@ -1,8 +1,19 @@
+import { IsString } from "class-validator"
+
 //dto representa o dado que sera transferido pela requisicao do cliente
-export interface CreateUserDto{
-    name: string,
-    email: string,
-    phone: string,
-    cpf:string,
-    password: string,
+export class CreateUserDto{
+    @IsString()
+    name: string
+
+    @IsString()
+    email: string
+
+    @IsString()
+    phone: string
+
+    @IsString()
+    cpf:string
+
+    @IsString()
+    password: string
 }
