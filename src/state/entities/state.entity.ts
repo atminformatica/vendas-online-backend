@@ -1,9 +1,11 @@
+import { CityEntity } from 'src/city/entities/city.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity({ name: 'state' })
@@ -22,4 +24,8 @@ export class StateEntity {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  //um estado pode ter varias cidades
+  @OneToMany(() => CityEntity, (city) => city.state)
+  cities?: CityEntity[];
 }

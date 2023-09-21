@@ -1,3 +1,4 @@
+import { CityEntity } from 'src/city/entities/city.entity';
 import { UserEntity } from '../../user/entities/user.entity';
 import {
   Column,
@@ -5,6 +6,8 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 
 
@@ -33,4 +36,14 @@ export class AddressEntity {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  //relacinamento vario endereços por usuario
+  @ManyToOne(() => UserEntity, (user) => user.addresses)
+  //relaciona o campo user_id dessa tabela com campo id da tabela usuario
+  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
+  user?: UserEntity;
+
+  @ManyToOne(() => CityEntity, (city) => city.addresses)
+  @JoinColumn({ name: 'city_id', referencedColumnName: 'id' })
+  city?: CityEntity;
 }
