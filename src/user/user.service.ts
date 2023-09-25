@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadGatewayException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dtos/createUser.dto';
 import { UserEntity } from './entities/user.entity';
 import {hash} from 'bcrypt'
@@ -19,8 +19,17 @@ export class UserService {
     }
 
     async createUser(createUserDto:CreateUserDto): Promise<UserEntity>{
+        //verifica email
+        const user = await this.findUserByEmail(createUserDto.email).catch(
+          () => undefined,
+        );
+    
+        if (user) {
+          throw new BadGatewayException('email registered in system');
+        }
+        //cripytografar senha do usario usando bcrypt
         const saltOrRounds = 10;
-        const password = createUserDto.password;
+        const password = createUserDto.password;     
         const passwordHashed = await hash(password, saltOrRounds);
         console.log("senha criptografada",passwordHashed)
 
